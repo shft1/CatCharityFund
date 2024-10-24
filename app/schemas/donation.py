@@ -13,7 +13,7 @@ class DonationCreate(DonationBase):
     pass
 
 
-class DonationDBUser(DonationBase):
+class DonationDB(DonationBase):
     id: int
     create_date: datetime
 
@@ -21,7 +21,7 @@ class DonationDBUser(DonationBase):
         orm_mode = True
 
 
-class DonationDBSuperuser(DonationDBUser):
+class DonationDBSuperuser(DonationDB):
     user_id: int
     invested_amount: int
     fully_invested: bool
