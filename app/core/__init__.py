@@ -1,3 +1,4 @@
 from .config import settings  # noqa
 from .db import get_async_session  # noqa
-from .user import get_user_db, get_user_manager  # noqa
+from .user import (current_superuser, current_user, get_user_db,  # noqa
+                   get_user_manager)
