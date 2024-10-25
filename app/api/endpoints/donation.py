@@ -20,18 +20,6 @@ async def get_all_donations(
     pass
 
 
-@router.get(
-    '/my',
-    response_model=list[DonationDB],
-    response_model_exclude_none=True
-)
-async def get_user_donations(
-    user: User = Depends(current_user),
-    session: AsyncSession = Depends(get_async_session)
-):
-    pass
-
-
 @router.post(
     '/',
     response_model=DonationDB,
@@ -39,6 +27,18 @@ async def get_user_donations(
 )
 async def create_donation(
     donation: DonationCreate,
+    user: User = Depends(current_user),
+    session: AsyncSession = Depends(get_async_session)
+):
+    pass
+
+
+@router.get(
+    '/my',
+    response_model=list[DonationDB],
+    response_model_exclude_none=True
+)
+async def get_user_donations(
     user: User = Depends(current_user),
     session: AsyncSession = Depends(get_async_session)
 ):
