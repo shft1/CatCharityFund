@@ -10,10 +10,7 @@ class CRUDBase:
     def __init__(self, model):
         self.model = model
 
-    async def get_multi(
-            self,
-            session: AsyncSession
-    ):
+    async def get_multi(self, session: AsyncSession):
         objects = await session.execute(
             select(self.model)
         )
