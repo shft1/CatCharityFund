@@ -2,8 +2,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core import current_superuser, get_async_session
+from app.crud import charity_project_crud
 from app.schemas import (CharityProjectCreate, CharityProjectDB,
                          CharityProjectUpdate)
+from app.services.investing import Investing
 
 router = APIRouter()
 
@@ -16,7 +18,8 @@ router = APIRouter()
 async def get_all_charity_project(
     session: AsyncSession = Depends(get_async_session)
 ):
-    pass
+    charity_projects = await charity_project_crud.get_multi(session)
+    return charity_projects
 
 
 @router.post(
@@ -29,7 +32,13 @@ async def create_charity_project(
     charity_project: CharityProjectCreate,
     session: AsyncSession = Depends(get_async_session)
 ):
-    pass
+    new_charity_project = await charity_project_crud.create(
+        obj=charity_project, session=session
+    )
+    investing_charity_project = await Investing.charity_project_investing(
+        new_charity_project, session
+    )
+    return investing_charity_project
 
 
 @router.patch(

@@ -8,6 +8,16 @@ from .base import CRUDBase
 
 class CRUDDonation(CRUDBase):
     @staticmethod
+    async def get_donation_by_id(
+        donation_id: int,
+        session: AsyncSession
+    ):
+        donation = session.execute(
+            select(Donation).where(Donation.id == donation_id)
+        )
+        return donation.scalars().first()
+
+    @staticmethod
     async def get_user_donations(
         user: User,
         session: AsyncSession
@@ -16,3 +26,6 @@ class CRUDDonation(CRUDBase):
             select(Donation).where(Donation.user_id == user.id)
         )
         return user_donations.scalars().all()
+
+
+donation_crud = CRUDDonation(Donation)

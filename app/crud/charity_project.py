@@ -10,14 +10,15 @@ from .base import CRUDBase
 
 class CRUDCharityProject(CRUDBase):
     @staticmethod
-    async def get_charity_project_by_id(
-        prj_id: int,
+    async def get_active_charity_project(
         session: AsyncSession
     ):
-        object = await session.execute(
-            select(CharityProject).where(CharityProject.id == prj_id)
+        active_charity_project = await session.execute(
+            select(CharityProject).where(
+                CharityProject.fully_invested is False
+            )
         )
-        return object.scalars().first()
+        return active_charity_project.scalars().all()
 
     @staticmethod
     async def update(

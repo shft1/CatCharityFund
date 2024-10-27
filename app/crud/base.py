@@ -20,7 +20,7 @@ class CRUDBase:
             self,
             obj,
             session: AsyncSession,
-            user: Optional[User]
+            user: Optional[User] = None
     ):
         obj_dict = obj.dict()
         if user:
