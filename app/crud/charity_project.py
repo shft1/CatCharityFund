@@ -10,12 +10,12 @@ from .base import CRUDBase
 
 class CRUDCharityProject(CRUDBase):
     @staticmethod
-    async def get_active_charity_project(
+    async def get_active_project(
         session: AsyncSession
     ):
         active_charity_project = await session.execute(
             select(CharityProject).where(
-                CharityProject.fully_invested is False
+                CharityProject.fully_invested == False
             )
         )
         return active_charity_project.scalars().all()

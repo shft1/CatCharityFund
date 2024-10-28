@@ -5,7 +5,7 @@ from app.core import current_superuser, current_user, get_async_session
 from app.crud import charity_project_crud, donation_crud
 from app.models import User
 from app.schemas import DonationCreate, DonationDB, DonationDBSuperuser
-from app.services.investing import Investing
+from app.services.investing import donation_investing
 
 router = APIRouter()
 
@@ -35,10 +35,10 @@ async def create_donation(
     new_donation = await donation_crud.create(
         donation, session, user
     )
-    active_charity_projects = await charity_project_crud.get_active_charity_project(
+    active_charity_projects = await charity_project_crud.get_active_project(
         session=session
     )
-    investing_donation = await Investing.donation_investing(
+    investing_donation = await donation_investing(
         new_donation, active_charity_projects, session
     )
     return investing_donation
