@@ -1,5 +1,4 @@
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import CharityProject
@@ -9,17 +8,6 @@ from .base import CRUDBase
 
 
 class CRUDCharityProject(CRUDBase):
-    @staticmethod
-    async def get_active_project(
-        session: AsyncSession
-    ):
-        active_charity_project = await session.execute(
-            select(CharityProject).where(
-                CharityProject.fully_invested == False
-            )
-        )
-        return active_charity_project.scalars().all()
-
     @staticmethod
     async def update(
         obj_model: CharityProject,

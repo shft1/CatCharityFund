@@ -32,14 +32,19 @@ async def create_charity_project(
     charity_project: CharityProjectCreate,
     session: AsyncSession = Depends(get_async_session)
 ):
-    new_charity_project = await charity_project_crud.create(
-        obj=charity_project, session=session
+    new_project = await charity_project_crud.create(
+        obj=charity_project,
+        session=session
     )
-    donations = await donation_crud.get_multi(session)
-    investing_charity_project = await project_investing(
-        new_charity_project, donations, session
+    donations = await donation_crud.get_multi(
+        session=session
     )
-    return investing_charity_project
+    investing_project = await project_investing(
+        project=new_project,
+        donations=donations,
+        session=session
+    )
+    return investing_project
 
 
 @router.patch(

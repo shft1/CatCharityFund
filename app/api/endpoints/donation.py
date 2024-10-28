@@ -35,11 +35,11 @@ async def create_donation(
     new_donation = await donation_crud.create(
         donation, session, user
     )
-    active_charity_projects = await charity_project_crud.get_active_project(
+    projects = await charity_project_crud.get_multi(
         session=session
     )
     investing_donation = await donation_investing(
-        new_donation, active_charity_projects, session
+        new_donation, projects, session
     )
     return investing_donation
 
