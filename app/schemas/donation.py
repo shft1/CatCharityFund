@@ -25,7 +25,7 @@ class DonationDBSuperuser(DonationDB):
     user_id: int
     invested_amount: int
     fully_invested: bool
-    close_date: Optional[str]
+    close_date: Optional[datetime]
 
     class Config:
         orm_mode = True
