@@ -19,6 +19,9 @@ class CharityProjectUpdate(CharityProjectBase):
     description: Optional[str] = Field(None, min_length=1)
     full_amount: Optional[int] = Field(None, gt=0)
 
+    class Config:
+        extra = 'forbid'
+
 
 class CharityProjectDB(CharityProjectBase):
     id: int
