@@ -1,5 +1,6 @@
 from fastapi import Depends
-from fastapi_users import BaseUserManager, FastAPIUsers, IntegerIDMixin
+from fastapi_users import (BaseUserManager, FastAPIUsers, IntegerIDMixin,
+                           InvalidPasswordException)
 from fastapi_users.authentication import (AuthenticationBackend,
                                           BearerTransport, JWTStrategy)
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
@@ -24,7 +25,18 @@ auth_backend = AuthenticationBackend(
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
-    pass
+    async def validate_password(self, password, user):
+        if len(password) < 3:
+            raise InvalidPasswordException(
+                reason='Пароль должен содержать 3 и более символов!'
+            )
+        if user.email in password:
+            raise InvalidPasswordException(
+                reason='Пароль не должен содержать e-mail!'
+            )
+
+    async def on_after_register(self, user, request=None):
+        print(f'Пользователь {user.email} успешно зарегистрирован')
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
