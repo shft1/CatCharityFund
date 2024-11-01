@@ -12,7 +12,7 @@ from app.core.user import current_superuser
 from app.crud import charity_project_crud, donation_crud
 from app.schemas import (CharityProjectCreate, CharityProjectDB,
                          CharityProjectUpdate)
-from app.services.investing import project_investing
+from app.services.investing import project_invest
 
 router = APIRouter()
 
@@ -50,7 +50,7 @@ async def create_charity_project(
     donations = await donation_crud.get_multi(
         session=session
     )
-    investing_project = await project_investing(
+    investing_project = await project_invest(
         project=new_project,
         donations=donations,
         session=session

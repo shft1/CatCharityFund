@@ -1,4 +1,4 @@
-async def save_investition(target, sources, session):
+async def save_investment(target, sources, session):
     session.add(target)
     session.add_all(sources)
     await session.commit()
