@@ -9,10 +9,10 @@ from app.api.validators import (check_project_exists,
                                 check_project_status_update)
 from app.core.db import get_async_session
 from app.core.user import current_superuser
-from app.crud import charity_project_crud, donation_crud
 from app.schemas import (CharityProjectCreate, CharityProjectDB,
                          CharityProjectUpdate)
-from app.services.investing import project_invest
+from app.services.investment import project_invest
+from app.services.managers import charity_project_manager, donation_manager
 
 router = APIRouter()
 
@@ -25,7 +25,7 @@ router = APIRouter()
 async def get_all_charity_project(
     session: AsyncSession = Depends(get_async_session)
 ):
-    charity_projects = await charity_project_crud.get_multi(session)
+    charity_projects = await charity_project_manager.get_multi(session)
     return charity_projects
 
 
@@ -43,11 +43,11 @@ async def create_charity_project(
         name=charity_project.name,
         session=session
     )
-    new_project = await charity_project_crud.create(
+    new_project = await charity_project_manager.create(
         obj=charity_project,
         session=session
     )
-    donations = await donation_crud.get_multi(
+    donations = await donation_manager.get_multi(
         session=session
     )
     investing_project = await project_invest(
@@ -85,7 +85,7 @@ async def update_charity_project(
             invested_amount=project.invested_amount,
             new_full_amount=charity_project_in.full_amount
         )
-    update_project = await charity_project_crud.update(
+    update_project = await charity_project_manager.update(
         obj_model=project,
         obj_in=charity_project_in,
         session=session
@@ -109,7 +109,7 @@ async def delete_charity_project(
     )
     await check_project_status_delete(project)
     await check_project_investing(project)
-    delete_project = await charity_project_crud.delete(
+    delete_project = await charity_project_manager.delete(
         obj_model=project,
         session=session
     )

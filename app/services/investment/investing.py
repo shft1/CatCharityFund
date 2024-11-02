@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import CharityProject, Donation
-from app.services.close_object import close_object
-from app.services.save_investment import save_investment
+from app.services.investment.close_object import close_object
+from app.services.investment.save_investment import save_investment
 
 
 async def donation_invest(

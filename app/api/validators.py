@@ -1,15 +1,15 @@
 from fastapi.exceptions import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.crud import charity_project_crud
 from app.models import CharityProject
+from app.services.managers import charity_project_manager
 
 
 async def check_project_exists(
         project_id: int,
         session: AsyncSession
 ):
-    project = await charity_project_crud.get(
+    project = await charity_project_manager.get(
         obj_id=project_id,
         session=session
     )
@@ -25,7 +25,7 @@ async def check_project_name_duplicate(
         name: str,
         session: AsyncSession
 ):
-    project = await charity_project_crud.get_project_by_name(
+    project = await charity_project_manager.get_project_by_name(
         name=name,
         session=session
     )

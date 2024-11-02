@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User
 
 
-class CRUDBase:
+class ManagerBase:
     def __init__(self, model):
         self.model = model
 

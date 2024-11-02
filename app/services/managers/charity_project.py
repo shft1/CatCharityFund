@@ -4,12 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import CharityProject
 from app.schemas import CharityProjectUpdate
-from app.services.close_object import close_object
+from app.services.investment import close_object
 
-from .base import CRUDBase
+from .base import ManagerBase
 
 
-class CRUDCharityProject(CRUDBase):
+class ManagerCharityProject(ManagerBase):
     @staticmethod
     async def get(
         obj_id: int,
@@ -58,4 +58,4 @@ class CRUDCharityProject(CRUDBase):
         return obj_model
 
 
-charity_project_crud = CRUDCharityProject(CharityProject)
+charity_project_manager = ManagerCharityProject(CharityProject)

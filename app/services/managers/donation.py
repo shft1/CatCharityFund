@@ -3,10 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Donation, User
 
-from .base import CRUDBase
+from .base import ManagerBase
 
 
-class CRUDDonation(CRUDBase):
+class ManagerDonation(ManagerBase):
     @staticmethod
     async def get_donation_by_id(
         donation_id: int,
@@ -28,4 +28,4 @@ class CRUDDonation(CRUDBase):
         return user_donations.scalars().all()
 
 
-donation_crud = CRUDDonation(Donation)
+donation_manager = ManagerDonation(Donation)
