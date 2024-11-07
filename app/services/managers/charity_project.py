@@ -1,5 +1,5 @@
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import select
+from sqlalchemy import extract, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import CharityProject
@@ -56,6 +56,24 @@ class ManagerCharityProject(ManagerBase):
         await session.delete(obj_model)
         await session.commit()
         return obj_model
+
+    @staticmethod
+    async def get_pjs_sorted_by_closing_speed(
+        session: AsyncSession
+    ):
+        projects = await session.execute(
+            select(CharityProject).where(
+                CharityProject.fully_invested
+            ).order_by(
+                (extract('year', CharityProject.close_date) -
+                 extract('year', CharityProject.create_date)),
+                (extract('month', CharityProject.close_date) -
+                 extract('month', CharityProject.create_date)),
+                (extract('day', CharityProject.close_date) -
+                 extract('day', CharityProject.create_date))
+            )
+        )
+        return projects.scalars().all()
 
 
 charity_project_manager = ManagerCharityProject(CharityProject)
