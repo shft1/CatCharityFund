@@ -7,7 +7,8 @@ from app.core.google_client import get_wrapper
 from app.core.user import current_superuser
 from app.schemas import CharityProjectDB
 from app.services.managers import (charity_project_manager,
-                                   set_user_permissions, spreadsheets_create)
+                                   set_user_permissions, spreadsheets_create,
+                                   spreadsheets_update_value)
 
 router = APIRouter()
 
@@ -21,9 +22,10 @@ async def get_report(
     session: AsyncSession = Depends(get_async_session),
     wrapper: Aiogoogle = Depends(get_wrapper)
 ):
-    projects = await charity_project_manager.get_pjs_sorted_by_closing_speed(
+    projects = await charity_project_manager.get_projects_by_completion_rate(
         session=session
     )
     spreadsheet_id = await spreadsheets_create(wrapper)
     await set_user_permissions(wrapper, spreadsheet_id)
+    await spreadsheets_update_value(wrapper, projects, spreadsheet_id)
     return projects

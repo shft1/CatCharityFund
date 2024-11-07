@@ -58,7 +58,7 @@ class ManagerCharityProject(ManagerBase):
         return obj_model
 
     @staticmethod
-    async def get_pjs_sorted_by_closing_speed(
+    async def get_projects_by_completion_rate(
         session: AsyncSession
     ):
         projects = await session.execute(

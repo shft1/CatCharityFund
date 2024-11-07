@@ -3,6 +3,7 @@ from datetime import datetime
 from aiogoogle import Aiogoogle
 
 from app.core.config import settings
+from app.models import CharityProject
 
 FORMAT = "%Y/%m/%d %H:%M:%S"
 
@@ -46,5 +47,36 @@ async def set_user_permissions(
             fileId=spreadsheet_id,
             json=permission_body,
             fields='id'
+        )
+    )
+
+
+async def spreadsheets_update_value(
+        wrapper_service: Aiogoogle,
+        projects: list[CharityProject],
+        spreadsheet_id: str
+):
+    time_now = datetime.now().strftime(FORMAT)
+    methods_sheets_api = await wrapper_service.discover(
+        'sheets', 'v4'
+    )
+    table_value = [
+        ['Отчет от', time_now],
+        ['Топ проектов по скорости закрытия'],
+        ['Название проекта', 'Время сбора', 'Описание']
+    ]
+    for project in projects:
+        closing_time = str(project.close_date - project.create_date)
+        table_value.append([project.name, closing_time, project.description])
+
+    update_body = {'majorDimension': 'ROWS',
+                   'values': table_value}
+
+    await wrapper_service.as_service_account(
+        methods_sheets_api.spreadsheets.values.update(
+            spreadsheetId=spreadsheet_id,
+            range='A1:E30',
+            valueInputOption='USER_ENTERED',
+            json=update_body
         )
     )
