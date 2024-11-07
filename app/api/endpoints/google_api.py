@@ -6,7 +6,8 @@ from app.core.db import get_async_session
 from app.core.google_client import get_wrapper
 from app.core.user import current_superuser
 from app.schemas import CharityProjectDB
-from app.services.managers import charity_project_manager, spreadsheets_create
+from app.services.managers import (charity_project_manager,
+                                   set_user_permissions, spreadsheets_create)
 
 router = APIRouter()
 
@@ -24,4 +25,5 @@ async def get_report(
         session=session
     )
     spreadsheet_id = await spreadsheets_create(wrapper)
+    await set_user_permissions(wrapper, spreadsheet_id)
     return projects
