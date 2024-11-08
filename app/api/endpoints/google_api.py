@@ -3,8 +3,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
-from app.core.google_client import get_wrapper
 from app.core.user import current_superuser
+from app.integrations import get_wrapper
 from app.schemas import CharityProjectDB
 from app.services.managers import (charity_project_manager,
                                    set_user_permissions, spreadsheets_create,
